@@ -29,3 +29,23 @@ Stack Operations: Includes a stack reversal algorithm using a single queue and i
 BST Operations: Full implementation of BST insertion, deletion (using inorder successor), and height-based tree balancing.
 
 Analysis: Performance comparison and memory complexity analysis for the implemented data structures.
+
+
+📂 Repository Structure
+Plaintext
+DSA-OEL/
+├── src/
+│   └── OEL_Code.cpp    # Full implementation of all DSA modules
+├── docs/
+│   └── Report.pdf      # Detailed lab report with diagrams and analysis
+└── README.md
+📈 Performance Analysis
+Bottleneck: The current implementation uses Bubble Sort for list organization, resulting in O(n 
+2
+ ) time complexity.
+
+Optimization: A Heap-based Priority Queue is recommended for large-scale systems to improve insertion/deletion complexity to O(logn).
+
+Memory Trade-off: The use of a Doubly Linked List requires an additional 8 bytes per node (for the prev pointer), which is justified by the requirement for bidirectional traversal and efficient deletions.
+
+Developed by Ayesha Imran | BSAI Student at NASTP Institute of Information Technology (NIIT).
