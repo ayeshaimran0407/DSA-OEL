@@ -1,0 +1,188 @@
+  
+NASTP Institute of Information Technology 
+Department of Artificial Intelligence 
+OPEN-ENDED LAB REPORT 
+Hospital Patient Priority System 
+Doubly Circular Linked List | Priority Queue | Stack | BST | Merge Sort 
+Subject 	Data Structures LAB 
+Lab Code 	CS-214 (L) 
+Submitted By 	Ayesha Imran 
+Roll No. 	S2025AI014 
+Submitted To 	Mr. Daniyal Qadri 
+Program 	BSAI 
+Semester 	3rd / Spring 2026 
+Due Date 	18-May-2026 
+ 	
+ 
+ 
+ 	 
+Table of Contents 
+1.	1. Full Source Code 
+2.	2. Scenario and Initial Data 
+3.	3. Requirement Checklist 
+4.	4. Part A - Bubble Sort on Doubly Circular Linked List 
+5.	5. Part B - Priority Queue Operations 
+6.	6. Part C - Stack, Reversal, and Infix to Postfix 
+7.	7. Part D - Binary Search Tree 
+8.	8. Part E - Merge Sort 
+9.	9. Part F - Sorted Insertion of Ayesha and Analysis 
+10.	10. Part G - Written Analysis 
+11.	11. Program Output Screenshots 
+The full C++ source code is placed immediately after this Table of Contents, as requested. 
+ 	  
+
+ 	  
+2.	Scenario and Initial Data 
+The hospital stores patient records in a doubly circular linked list. Each patient node contains patientID, name, severity, arrivalOrder, next pointer, and prev pointer. Severity 10 means most critical. If two patients have the same severity, the patient with lower arrivalOrder gets priority. 
+Node 	Patient ID 	Name 	Severity 	Arrival 	Circular Links 
+P1 	101 	Ali 	4 	1 	P7 <-> P1 <-> P2 
+P2 	102 	Sara 	9 	2 	P1 <-> P2 <-> P3 
+P3 	103 	Usman 	4 	3 	P2 <-> P3 <-> P4 
+P4 	104 	Hina 	7 	4 	P3 <-> P4 <-> P5 
+P5 	105 	Bilal 	2 	5 	P4 <-> P5 <-> P6 
+P6 	106 	Zara 	9 	6 	P5 <-> P6 <-> P7 
+P7 	107 	Hamza 	5 	7 	P6 <-> P7 <-> P1 
+ 
+3.	Requirement Checklist 
+Part 	Requirement 	Status 
+A 	Bubble sort code, dry run, pointer diagram, counts, sorted list 	Covered 
+B 	Priority queue enqueue/dequeue using linked list and 5 operations 	Covered 
+C 	Stack push states, reverse using one queue, infix to postfix trace 	Covered 
+D 	BST insertion, traversals, deletion with successor, balance check 	Covered 
+E 	Merge sort split tree, merge comparisons, BST inorder argument 	Covered 
+F 	Sorted insertion of P10 Ayesha, pointer updates, traversals, average 	Covered 
+G 	Bottleneck analysis, memory analysis, selection sort swap comparison 	Covered 
+ 
+4.	Part A - Bubble Sort on Doubly Circular Linked List 
+The list is sorted by severity in descending order. If two patients have the same severity, lower arrivalOrder comes first. The function bubbleSortPatients() swaps patient data only, not the node links. 
+4.1	First Swap Pointer Diagram 
+  
+Figure 1: Before/after diagram for the first Bubble Sort swap. 
+4.2	Dry Run Table 
+Pass 	Array-equivalent list state 
+Initial 	P1(4) -> P2(9) -> P3(4) -> P4(7) -> P5(2) -> P6(9) -> P7(5) 
+Pass 1 	P2(9) -> P1(4) -> P4(7) -> P3(4) -> P6(9) -> P7(5) -> P5(2) 
+Pass 2 	P2(9) -> P4(7) -> P1(4) -> P6(9) -> P7(5) -> P3(4) -> P5(2) 
+Pass 3 	P2(9) -> P4(7) -> P6(9) -> P7(5) -> P1(4) -> P3(4) -> P5(2) 
+Pass 4 	P2(9) -> P6(9) -> P4(7) -> P7(5) -> P1(4) -> P3(4) -> P5(2) 
+Pass 5 	P2(9) -> P6(9) -> P4(7) -> P7(5) -> P1(4) -> P3(4) -> P5(2) 
+ 
+Total comparisons made by the program: 30. Total swaps performed: 10. 
+Final sorted list: P2(102,Sara,9) <-> P6(106,Zara,9) <-> P4(104,Hina,7) <-> P7(107,Hamza,5) <-> P1(101,Ali,4) <-> P3(103,Usman,4) <-> P5(105,Bilal,2). 
+5.	Part B - Priority Queue Using Doubly Circular Linked List 
+The sorted list from Part A is used as a priority queue. Dequeue removes the front patient, which has the highest priority. Enqueue inserts a patient into the correct sorted position according to severity and arrivalOrder. 
+Step 	Operation 	Reason 	List State 
+1 	dequeue() 	Sara leaves first because severity 9 and earlier arrivalOrder than Zara. 	P6 -> P4 -> P7 -> P1 -> P3 -> P5 
+2 	enqueue P8 Nida(9,8) 	Inserted between Zara and Hina. 	P6 -> P8 -> P4 -> P7 -> P1 -> P3 -> P5 
+3 	dequeue() 	Zara leaves because severity 9 and arrivalOrder 6 is before Nida arrivalOrder 8. 	P8 -> P4 -> P7 -> P1 -> P3 -> P5 
+4 	enqueue P9 Tariq(10,9) 	Inserted at head because severity 10 is highest. 	P9 -> P8 -> P4 -> P7 -> P1 -> P3 -> P5 
+5 	dequeue() 	Tariq leaves because severity 10 is highest. 	P8 -> P4 -> P7 -> P1 -> P3 -> P5 
+ 
+The enqueuePatient() function updates both next and prev links, so the doubly circular invariant remains valid. 
+6.	Part C - Stack, Reversal, and Infix to Postfix 
+Patients remaining after Part B are pushed into a linked-list stack in the current queue order. The code then reverses the stack using one queue. 
+Action 	Stack State 
+Push 108 	TOP -> 108 
+Push 104 	TOP -> 104 -> 108 
+Push 107 	TOP -> 107 -> 104 -> 108 
+Push 101 	TOP -> 101 -> 107 -> 104 -> 108 
+Push 103 	TOP -> 103 -> 101 -> 107 -> 104 -> 108 
+Push 105 	TOP -> 105 -> 103 -> 101 -> 107 -> 104 -> 108 
+ 
+  
+ 
+Figure 2: Stack mapping, actual IDs, and postfix result. 
+Step 	Trace 
+Pop phase 	105, 103, 101, 107, 104, 108 are popped from stack and enqueued. 
+Push phase 	105, 103, 101, 107, 104, 108 are dequeued and pushed back. 
+Final reversed stack 	TOP -> 108 -> 104 -> 107 -> 101 -> 103 -> 105 
+ 
+Symbol 	Action 	Output 
+A 	Add to output 	A 
++ 	Push operator 	A 
+B 	Add to output 	AB 
+) 	Pop + to output 	AB+ 
+* 	Push operator 	AB+ 
+C 	Add to output 	AB+C 
+- 	Push operator 	AB+C 
+D 	Add to output 	AB+CD 
+) 	Pop - to output 	AB+CD- 
+END 	Pop * 	AB+CD-* 
+ 
+7.	Part D - Binary Search Tree 
+The code builds a BST using the insertion order 104, 102, 106, 101, 103, 105, 107. This makes patientID 104 the root and gives it two children, so the two-child deletion requirement is demonstrated clearly. 
+  
+Figure 3: BST after all insertions. 
+Inserted ID 	Reason / Position 
+104 	Root node 
+102 	Less than 104, goes left 
+106 	Greater than 104, goes right 
+101 	Less than 104 and 102, goes left of 102 
+103 	Less than 104 but greater than 102, goes right of 102 
+105 	Greater than 104 but less than 106, goes left of 106 
+107 	Greater than 104 and 106, goes right of 106 
+ 
+Traversal 	Sequence 
+Inorder 	101 102 103 104 105 106 107 
+Preorder 	104 102 101 103 106 105 107 
+Postorder 	101 103 102 105 107 106 104 
+ 
+Observation: Inorder traversal of a valid BST returns sorted values because it visits left subtree, root, and then right subtree. 
+Deletion method: The code uses the inorder successor. The successor of 104 is 105, because 105 is the smallest node in the right subtree. Replacing 104 with 105 keeps the BST property valid. 
+  
+Figure 4: BST after deleting 104 using inorder successor. 
+  
+Figure 5: Balance check and rotation result. 
+8.	Part E - Merge Sort on Inorder Sequence 
+After deleting 104, the inorder sequence used by the code is 101, 102, 103, 105, 106, 107. Merge sort recursively splits and then merges this array. 
+  
+Figure 6: Complete merge sort recursion/split tree. 
+Step 	Detail 
+Final left half 	101 102 103 
+Final right half 	105 106 107 
+Comparison 1 	101 vs 105 -> place 101 
+Comparison 2 	102 vs 105 -> place 102 
+Comparison 3 	103 vs 105 -> place 103 
+Remaining 	Copy 105, 106, 107 
+Final array 	101 102 103 105 106 107 
+ 
+Classmate argument: Correct. Inorder traversal of a BST is already sorted. Merge sort is therefore not needed for ordering here, but the algorithm still runs because the function does not check whether the array is already sorted. 
+9.	Part F - Sorted Insertion of Ayesha and Average Severity 
+New patient: P10, patientID 110, name Ayesha, severity 6, arrivalOrder 10. According to the sorted priority order, Ayesha is inserted between Hina(severity 7) and Hamza(severity 5). 
+Pointer Update 	Meaning 
+current->next = newNode 	Hina points forward to Ayesha 
+newNode->prev = current 	Ayesha points backward to Hina 
+newNode->next = after 	Ayesha points forward to Hamza 
+after->prev = newNode 	Hamza points backward to Ayesha 
+ 
+List after insertion: P8(108,Nida,9) <-> P4(104,Hina,7) <-> P10(110,Ayesha,6) <-> P7(107,Hamza,5) <-> P1(101,Ali,4) <-> P3(103,Usman,4) <-> P5(105,Bilal,2). 
+Forward traversal: 108 104 110 107 101 103 105. 
+Backward traversal: 105 103 101 107 110 104 108. 
+Item 	Value 
+Total severity 	9 + 7 + 6 + 5 + 4 + 4 + 2 = 37 
+Patients 	7 
+Average 	37 / 7 = 5.28571 
+Above average 	Nida(9), Hina(7), Ayesha(6) 
+Count 	3 
+ 
+10.	Part G - Written Analysis 
+10.1	Bottleneck and Better Replacement 
+For a system with 1,000,000 patient records, the slowest operation depends on usage. The initial Bubble Sort is expensive because it has O(n^2) time complexity. In the running priority queue, sorted insertion also scans the linked list, so enqueue can take O(n). A better replacement for priority handling is a heap-based priority queue. A heap supports insertion and deletion of highest priority in O(log n), which is much better for a large hospital system. 
+10.2	Memory Trade-off 
+On a 64-bit system, one pointer takes 8 bytes. A singly linked list node has one pointer (next), while a doubly linked list node has two pointers (next and prev). Therefore, the extra memory per node is exactly 8 bytes. For 1,000,000 patients, the extra memory is 8,000,000 bytes, which is about 7.63 MB. This trade-off is justified because the lab performs backward traversal, deletion, and circular pointer verification. 
+10.3	Selection Sort vs Bubble Sort 
+Bubble Sort swaps from Part A = 10. Selection Sort swaps from the program = 6. Therefore, Selection Sort performs fewer swaps than Bubble Sort on this exact data. 
+11.	Program Output Screenshots 
+Output screenshots are inserted in a compact size so the report remains neat and readable. 
+  
+Program Output - Original List and Bubble Sort 
+  
+Program Output - Priority Queue Operations 
+  
+Program Output - Stack, Reverse, and Postfix 
+  
+Program Output - BST Operations 
+  
+Program Output - Merge Sort  
+  
+Program Output - Ayesha Insertion and Analysis 
